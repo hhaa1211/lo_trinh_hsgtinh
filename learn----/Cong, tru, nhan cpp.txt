@@ -1,0 +1,71 @@
+#include <bits/stdc++.h>
+#define maxn
+#define f0(i,n) for(int i=0; i<n; i++)
+#define f1(i,n) for(int i=1; i<=n; i++)
+#define el cout<<'\n'
+using namespace std;
+string Cong (string a, string b) {
+    reverse(a.begin(), a.end());
+    reverse(b.begin(), b.end());
+    while (a.size() < b.size()) a += '0';
+    while (b.size() < a.size()) b += '0';
+    int rem = 0; /// remember
+    string ans;
+    for (int i=0; i<a.size(); i++) {
+        int c = a[i]-'0' + b[i]-'0' + rem; /// 0 -> 19
+        rem = c / 10;
+        c %= 10;
+        ans += (char) (c + '0');
+    }
+    if (rem) ans += '1';
+    reverse(ans.begin(), ans.end());
+    return ans;
+}
+string Tru (string a, string b) {
+    if (b.size() > a.size() || (a.size() == b.size() && b > a)) swap(a, b);
+    reverse(a.begin(), a.end());
+    reverse(b.begin(), b.end());
+    while (b.size() < a.size()) b += '0';
+    int rem = 0;
+    string ans;
+    for (int i=0; i<a.size(); i++) {
+        int c = a[i] - b[i] - rem;
+        if (c < 0) c += 10, rem = 1;
+        else rem = 0;
+        ans += (char) (c + '0');
+    }
+    while (ans.size() > 1 && ans.back() == '0') ans.pop_back();
+    reverse(ans.begin(), ans.end());
+    return ans;
+}
+string Nhan (string a, string b) { /// O(n^2)
+    reverse(a.begin(), a.end());
+    reverse(b.begin(), b.end());
+    vector <int> c(a.size() + b.size());
+    for (int i=0; i<a.size(); i++)
+        for (int j=0; j<b.size(); j++)
+            c[i+j] += (a[i] - '0') * (b[i] - '0');
+    for (int i=0; i<c.size(); i++) {
+        c[i+1] += c[i] / 10;
+        c[i] %= 10;
+    }
+    while (c.size() > 1 && c.back() == 0) c.pop_back();
+    reverse(c.begin(), c.end());
+    string ans;
+    for (int x:c) ans += (char) (x + '0');
+    return ans;
+}
+int main()
+{
+    ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
+    int t; cin >> t;
+    while (t--) {
+        char c;
+        string a, b;
+        cin >> c >> a >> b;
+        if (c == '+') cout << Cong(a, b);
+        else cout << Tru(a, b);
+        cout << '\n';
+    }
+    return 0;
+}
