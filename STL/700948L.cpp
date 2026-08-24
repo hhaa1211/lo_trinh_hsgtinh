@@ -1,35 +1,39 @@
 #include <iostream>
-#include <queue>
 #include <utility>
+#include <algorithm>
+#include <queue>
 
 using namespace std;
 
 int main(){
+    freopen("minkseq.inp", "r", stdin);
+    freopen("minkseq.out", "w", stdout);
     ios_base::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
     int t; cin >> t;
     while (t--){
         int n, k; cin >> n >> k;
-        int a[n], b[n];
+        pair<int, int> a[n];
         for (int i=0; i<n; i++){
-            cin >> a[i];
+            cin >> a[i].first;
         }
         for (int i=0; i<n; i++){
-            cin >> b[i];
+            cin >> a[i].second;
         }
-        priority_queue<pair<int, int>> pq;
-        long long cur_sum = 0;
-        for (int i=0; i<k; i++){
-            pq.push({a[i], i});
-            cur_sum += b[i];
-        }
-        for (int i=k; i<n; i++){
-            long long tmp = cur_sum*pq.top().first;
-            long long tmp2 = (cur_sum-b[pq.top().second]+b[i])*a[i];
-            if (tmp2<tmp){
-                cur_sum = cur_sum-b[pq.top().second]+b[i];
-                pq.pop(); pq.push({a[i], i});
+        sort(a, a+n);
+        long long s = 0;
+        long long ans = 1e18;
+        priority_queue<int> q;
+        for (int i=1; i<=n; i++){
+            if (i>=k){
+                ans = min(ans, 1LL*a[i-1].first*(a[i-1].second+s));
+            }
+            q.push(a[i-1].second);
+            s += a[i-1].second;
+            if (q.size()==k){
+                s -= q.top();
+                q.pop();
             }
         }
-        cout << cur_sum*pq.top().first << '\n';
+        cout << ans << '\n';
     }
 }

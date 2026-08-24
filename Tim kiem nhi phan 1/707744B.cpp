@@ -40,7 +40,7 @@ int main(){
                 }
                 break;
             case 4:
-                i= lower_bound(a, a+n, x)-a;
+                i = lower_bound(a, a+n, x)-a;
                 if (i==0){
                     cout << -1;
                 } else{
@@ -50,7 +50,7 @@ int main(){
             case 5: {
                 int l = lower_bound(a, a+n, x)-a;
                 int r = upper_bound(a, a+n, x)-a;
-                cout << l-r;
+                cout << r-l;
                 break;
             }
         }
