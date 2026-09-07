@@ -1,23 +1,11 @@
 #include <iostream>
 #include <vector>
+#include <queue>
 
 using namespace std;
 
-bool vis[100005];
+int vis[100005];
 vector<int> g[100005];
-
-int c = 0;
-
-void dfs(int x){
-    vis[x] = true;
-    if (x==1){
-        c = 1;
-    }
-    for (int i : g[x]){
-        dfs(i);
-        c++;
-    }
-}
 
 int main(){
     ios_base::sync_with_stdio(false); cin.tie(nullptr); cout.tie(nullptr);
@@ -27,8 +15,20 @@ int main(){
         g[x].push_back(y);
         g[y].push_back(x);
     }
-    int ans = -1;
-    for (int i : g[1]){
-
+    queue<int> q;
+    q.push(1);
+    vis[1] = 1;
+    while (!q.empty()){
+        int u = q.front();
+        q.pop();
+        for (int v : g[u]) if (vis[v]==0){
+            vis[v] = vis[u]+1;
+            q.push(v);
+        }
+    }
+    if (vis[n]){
+        cout << vis[n];
+    } else{
+        cout << -1;
     }
 }
