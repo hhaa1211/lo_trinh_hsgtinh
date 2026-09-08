@@ -5,21 +5,23 @@ using namespace std;
 
 typedef struct{
     int sd;
-    int av;
+    long long av;
     int gv;
 } ans;
 
 vector<int> g[100005];
 ans vis[100005];
 int v[100005];
+ans res[100005];
 
-ans dfs(int i){
+ans dfs(int i, vector<int>& nb){
+    nb.push_back(i);
     vis[i].sd = 1;
     vis[i].av = v[i];
     vis[i].gv = v[i];
     for (int j : g[i]){
         if (!vis[j].sd){
-            ans tmp = dfs(j);
+            ans tmp = dfs(j, nb);
             vis[i].sd += tmp.sd;
             vis[i].av += tmp.av;
             vis[i].gv = max(vis[i].gv, tmp.gv);
@@ -37,11 +39,11 @@ int main(){
         g[x].push_back(y);
         g[y].push_back(x);
     }
-    ans res[n+1];
     for (int i=1; i<=n; i++){
         if (!vis[i].sd){
-            res[i] = dfs(i);
-            for (int j : g[i]){
+            vector<int> nb;
+            res[i] = dfs(i, nb);
+            for (int j : nb){
                 res[j] = res[i];
             }
         }
